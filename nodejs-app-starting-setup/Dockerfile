@@ -1,12 +1,18 @@
+# Every instruction in an image creates a cacheable layer
+# Layer hepl with image re-building and sharing
 FROM node
 
 WORKDIR /app
 
-# all files will be copied to /app folder in the image file system
-COPY . /app
+# in this upper layer, copy package.json to /app folder in the image
+# once cached, docker will not run "npm install" again
+COPY package.json /app
 
 # RUN: executed "npm install" when image is created
 RUN npm install
+
+# in this lower layer, copy all files will to /app folder in the image file system
+COPY . /app
 
 EXPOSE 80
 
