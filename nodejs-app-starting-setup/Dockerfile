@@ -1,5 +1,5 @@
 # Every instruction in an image creates a cacheable layer
-# Layer hepl with image re-building and sharing
+# Layer help with image re-building and sharing
 FROM node
 
 WORKDIR /app
