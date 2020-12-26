@@ -1,7 +1,9 @@
+# Define "name:tag" combination of an image
+# "node" is the group name of images, while the optional "12" is the specialised tag of an image
+FROM node:12
+
 # Every instruction in an image creates a cacheable layer
 # Layer help with image re-building and sharing
-FROM node
-
 WORKDIR /app
 
 # in this upper layer, copy package.json to /app folder in the image
