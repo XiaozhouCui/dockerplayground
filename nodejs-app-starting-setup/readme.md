@@ -1,9 +1,16 @@
 ## "docker run" and "docker start"
 
-- `docker run -p 3000:80 CONTAINER` will automatically attach to the running container, unless `-d` is added.
+- `docker run -p 3000:80 IMAGE` will automatically attach to the running container, unless `-d` is added.
 - `docker start CONTAINER` will re-start a container without attaching to its console.
 - To check the logs in a detached container, run `docker logs CONTAINER`
 - To keep listening to a detached container, run `docker logs -f CONTAINER`
+
+## Interactive Mode (need input on terminal)
+
+- When terminal input is needed, `docker run IMAGE` will show error   
+- To enter input into container, need to use `docker run -it IMAGE` to start interactive mode and a terminal
+- When using `docker start CONTAINER` to re-start a container, `-a` can attach, but cannot enter value.
+- Use `docker start -a -i CONTAINER` to interact with container.
 
 ## Remove containers and images
 
@@ -33,4 +40,5 @@
 ## Add "name:tag" combination to an image
 - Use `-t` to add "name:tag" to an image, for example: "node:12" where tag 12 is optional
 - Run `docker build -t goals:latest .` to create a new image "goals:latest" based on current Dockerfile
-- Run `docker run -p 3000:80 -d --rm --name goalsapp goals:latest` to starat a new container "goalsapp" based on image "goals:latest"
+- Run `docker run -p 3000:80 -d --rm --name goalsapp goals:latest` to starat a server container "goalsapp" based on image "goals:latest"
+- Run `docker run --rm -it --name bmiapp bmi:initial` to starat an interactive container "bmiapp" based on image "bmi:initial"
