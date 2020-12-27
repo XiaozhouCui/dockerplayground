@@ -2,6 +2,7 @@
 - Build a Dockerfile in the project folder
 - Run `docker build .` to create an anonymous image, docker will auto assign name and ID to it
 - Every instruction in Dockerfile creates a cacheable layer
+- Images are read-only, re-build is required in order to change anything in an image.
 
 ## Start a container
 - Once an image is created, use `docker run` to start a container
