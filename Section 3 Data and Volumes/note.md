@@ -33,7 +33,7 @@
 - In Dockerfile, after `COPY . .` add `ENV PORT 80` and then `EXPOSE $PORT`
 - Run `docker build -t feedback-node:env .`
 - Run `docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v "%cd%":/app:ro -v /app/temp -v /app/node_modules feedback-node:env`
-- Load ".env" file in current folder by adding `--env-file ./.env`
+- To override environment variables, add `-e PORT=8000`, or load ".env" file at run time `--env-file ./.env`
 - Run `docker run -d --rm -p 3000:80 --env-file ./.env --name feedback-app -v feedback:/app/feedback -v "%cd%":/app:ro -v /app/temp -v /app/node_modules feedback-node:env`
 
 ## Build Arguments (ARG)
