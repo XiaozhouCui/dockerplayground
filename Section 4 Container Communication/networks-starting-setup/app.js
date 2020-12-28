@@ -68,8 +68,12 @@ app.get('/people', async (req, res) => {
 });
 
 mongoose.connect(
-  // "host.docker.internal" is the special docker URL for "localhost", it will be translated into IP address of local machine
-  'mongodb://host.docker.internal:27017/swfavorites',
+  // "host.docker.internal" is the special docker URL for "localhost", it will be transformed into IP address of local machine
+  // 'mongodb://host.docker.internal:27017/swfavorites',
+  // "172.17.0.2" is the IP address of mongodb container, acquired from running "docker container inspect mongodb"
+  // 'mongodb://172.17.0.2:27017/swfavorites',
+  // "mongodb" is the name of container under docker network "favo-net", it will be transformed into IP address
+  'mongodb://mongodb:27017/swfavorites',
   { useNewUrlParser: true },
   (err) => {
     if (err) {
