@@ -28,3 +28,14 @@
 - Add `:ro` at the end of the bind mount volume
 - Add another `-v` option with "/app/temp" after the bind mount volume to over write it.
 - Run `docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v "%cd%":/app:ro -v /app/temp -v /app/node_modules feedback-node:volumes`
+
+## Environment variables
+- In Dockerfile, after `COPY . .` add `ENV PORT 80` and then `EXPOSE $PORT`
+- Run `docker build -t feedback-node:env .`
+- Run `docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v "%cd%":/app:ro -v /app/temp -v /app/node_modules feedback-node:env`
+- Load ".env" file in current folder by adding `--env-file ./.env`
+- Run `docker run -d --rm -p 3000:80 --env-file ./.env --name feedback-app -v feedback:/app/feedback -v "%cd%":/app:ro -v /app/temp -v /app/node_modules feedback-node:env`
+
+## Build Arguments (ARG)
+- In Dockerfile, add `ARG DEFAULT_PORT=80`
+- In build time, run `docker build -t feedback-node:dev --build-arg DEFAULT_PORT=8000`
