@@ -16,10 +16,10 @@
 - Named volumes are not attached to containers, and will survive container shutdown
 - To re-connect a named volume, add `-v feedback:/app/feedback` when starting a new container
 
-## Bind Mounts: immediate update, no rebuild
+## Bind Mounts: instant update, no rebuild
 - You define a folder on your host machine.
 - When starting a new container, add a SECOND `-v` option, and the ABSOLUTE PATH of your local folder `"%cd%"`
 - `-v "%cd%":/app` will overwrite entire "/app" folder in container with current local folder
-- Then add a THIRD `-v` option, to add an anonymous volume and node_modules folder inside container
+- Then add a THIRD `-v` option, to add an anonymous volume for /app/node_modules folder inside container
 - `-v /app/node_modules` will make sure the "/app/node_modules" inside container is NOT over written, and will also create an empty "node_modules" folder in local current folder
 - In Windows cmd (not power-shell), run `docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v "%cd%":/app -v /app/node_modules feedback-node:volumes`
