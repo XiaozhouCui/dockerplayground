@@ -16,7 +16,7 @@
 - Named volumes are not attached to containers, and will survive container shutdown
 - To re-connect a named volume, add `-v feedback:/app/feedback` when starting a new container
 
-## Bind Mounts: instant update, no rebuild
+## Bind Mounts: instant update, no rebuild, full absolute path required
 - You specify the folder on your host machine where the volume is bound to.
 - When starting a new container, add a SECOND `-v` option, and the ABSOLUTE PATH of your local current folder `"%cd%"`
 - `-v "%cd%":/app` will overwrite entire "/app" folder in container with current local folder

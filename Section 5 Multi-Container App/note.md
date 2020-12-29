@@ -30,7 +30,16 @@
 
 ## Add Volume and Environemnt Variables to mongodb
 - In mongo image, data is stored in `/data/db` inside container, ENV are called `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD`
-- Add volume `data` to the mongodb container `docker run --name mongodb -v data:/data/db --rm -d --network goals-net mongo`
+- Add a named volume `data` to the mongodb container `docker run --name mongodb -v data:/data/db --rm -d --network goals-net mongo`
 - Add auth credentials as environment variables `docker run --name mongodb -v data:/data/db --rm -d --network goals-net -e MONGO_INITDB_ROOT_USERNAME=joe -e MONGO_INITDB_ROOT_PASSWORD=secret mongo`
 - Since auth is required, need to update backend app.js `mongodb://joe:secret@mongodb:27017/course-goals?authSource=admin`
 - Rebuild backend image and restart goals-backend `docker run --name goals-backend --rm -p 80:80 --network goals-net goals-node`
+
+## Volumes, Bind Mounts and Polishing for the Node.js container
+- Add named volume "logs", bind the volume to internal path `-v logs:/app/logs`
+- CMD: `docker run --name goals-backend -v logs:/app/logs --rm -p 80:80 --network goals-net goals-node`
+- For instant update, use Bind Mounts to bind everything in /app to the local current folder `-v "%cd%":/app`
+- CMD: `docker run --name goals-backend -v "%cd%":/app -v logs:/app/logs --rm -p 80:80 --network goals-net goals-node`
+- Add an anonymous volume `-v /app/node_modules` to prevent over writing the "node_modules" folder inside container
+- For multiple volumes, `-v /app/node_modules` and `-v logs:/app/logs` will override `-v "%cd%":/app`, so the sub-folders `logs` and `node_modules` won't be over written by the Bind Mounts at `/app` level.
+- CMD: `docker run --name goals-backend -v "%cd%":/app -v logs:/app/logs -v /app/node_modules --rm -p 80:80 --network goals-net goals-node`
