@@ -27,3 +27,10 @@
 - Restart backend container on prot 80 `docker run --name goals-backend --rm -d -p 80:80 --network goals-net goals-node`
 - React code runs in browser instead of container, so no need to add `--network`
 - Start react container, run `docker run -it --name goals-frontend --rm -d -p 3000:3000 goals-react`
+
+## Add Volume and Environemnt Variables to mongodb
+- In mongo image, data is stored in `/data/db` inside container, ENV are called `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD`
+- Add volume `data` to the mongodb container `docker run --name mongodb -v data:/data/db --rm -d --network goals-net mongo`
+- Add auth credentials as environment variables `docker run --name mongodb -v data:/data/db --rm -d --network goals-net -e MONGO_INITDB_ROOT_USERNAME=joe -e MONGO_INITDB_ROOT_PASSWORD=secret mongo`
+- Since auth is required, need to update backend app.js `mongodb://joe:secret@mongodb:27017/course-goals?authSource=admin`
+- Rebuild backend image and restart goals-backend `docker run --name goals-backend --rm -p 80:80 --network goals-net goals-node`
