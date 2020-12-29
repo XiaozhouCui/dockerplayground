@@ -23,6 +23,7 @@
 - Then add a THIRD `-v` option, to add an anonymous volume for /app/node_modules folder inside container
 - `-v /app/node_modules` will make sure the "/app/node_modules" inside container is NOT over written, and will also create an empty "node_modules" folder in local current folder
 - In Windows cmd (not power-shell), run `docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v "%cd%":/app -v /app/node_modules feedback-node:volumes`
+- For multiple volumes, `-v /app/node_modules` and `-v feedback:/app/feedback` will override `-v "%cd%":/app`, so the sub-folders `feedback` and `node_modules` won't be over written by the Bind Mounts at `/app` level.
 
 ## Read-only volumes
 - Add `:ro` at the end of the bind mount volume

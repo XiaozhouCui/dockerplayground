@@ -83,6 +83,9 @@ app.delete('/goals/:id', async (req, res) => {
   }
 });
 
+console.log('process.env.MONGODB_USERNAME: ', process.env.MONGODB_USERNAME);
+console.log('process.env.MONGODB_PASSWORD: ', process.env.MONGODB_PASSWORD);
+
 mongoose.connect(
   // 'mongodb://localhost:27017/course-goals',
   // 'mongodb://host.docker.internal:27018/course-goals',

@@ -35,7 +35,7 @@
 - Since auth is required, need to update backend app.js `mongodb://joe:secret@mongodb:27017/course-goals?authSource=admin`
 - Rebuild backend image and restart goals-backend `docker run --name goals-backend --rm -p 80:80 --network goals-net goals-node`
 
-## Volumes, Bind Mounts and Polishing for the Node.js container
+## Volumes and Bind Mounts for the Node.js container: persist logs and instant update
 - Add named volume "logs", bind the volume to internal path `-v logs:/app/logs`
 - CMD: `docker run --name goals-backend -v logs:/app/logs --rm -p 80:80 --network goals-net goals-node`
 - For instant update, use Bind Mounts to bind everything in /app to the local current folder `-v "%cd%":/app`
@@ -43,3 +43,10 @@
 - Add an anonymous volume `-v /app/node_modules` to prevent over writing the "node_modules" folder inside container
 - For multiple volumes, `-v /app/node_modules` and `-v logs:/app/logs` will override `-v "%cd%":/app`, so the sub-folders `logs` and `node_modules` won't be over written by the Bind Mounts at `/app` level.
 - CMD: `docker run --name goals-backend -v "%cd%":/app -v logs:/app/logs -v /app/node_modules --rm -p 80:80 --network goals-net goals-node`
+- Add ".dockerignore" file to ignore "node_modules" when building image with `COPY . .`
+
+## Add environment variables to Node.js container
+- In backend Dockerfile add `ENV MONGODB_USERNAME root`
+- Rebuild the image and restart goals-backend, `console.log(process.env.MONGODB_USERNAME)` will return "root"
+- Override `MONGODB_USERNAME=joe` in CMD when restarting container: `docker run --name goals-backend -v "%cd%":/app -v logs:/app/logs -v /app/node_modules -e MONGODB_USERNAME=joe --rm -p 80:80 --network goals-net goals-node`
+- `console.log(process.env.MONGODB_USERNAME)` will return "joe"
