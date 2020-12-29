@@ -26,3 +26,4 @@
 ::1 - - [29/Dec/2020:06:39:52 +0000] "POST /goals HTTP/1.1" 201 79 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
 ::1 - - [29/Dec/2020:06:49:26 +0000] "GET /goals HTTP/1.1" 200 115 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
 ::1 - - [29/Dec/2020:06:49:29 +0000] "GET /goals HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+::1 - - [29/Dec/2020:06:53:45 +0000] "GET /goals HTTP/1.1" 200 12 "http://localhost:3000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
