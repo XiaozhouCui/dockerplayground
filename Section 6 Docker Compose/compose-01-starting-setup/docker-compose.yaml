@@ -2,18 +2,38 @@ version: "3.8"
 services:
   mongodb:
     image: "mongo"
-    volumes: 
+    volumes:
       - data:/data/db
     # environment:
-      # - MONGO_INITDB_ROOT_USERNAME=joe
-      # MONGO_INITDB_ROOT_USERNAME: joe
-      # MONGO_INITDB_ROOT_PASSWORD: secret
-    env_file: 
+    #   - MONGO_INITDB_ROOT_USERNAME=joe # "-" is used for single value, as opposed to key-value pairs
+    #   MONGO_INITDB_ROOT_USERNAME: joe
+    #   MONGO_INITDB_ROOT_PASSWORD: secret
+    env_file:
       - ./env/mongo.env
-    # networks: not needed, compose will auto create default network
-      # - goals-net 
-  # backend:
+    # networks: # networks not needed, compose will auto create default network
+    #   - goals-net
+  backend:
+    # build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      # args:
+      #   some-arg: 1
+    ports:
+      - "80:80"
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app # we can use relative path for bind mounts in docker-compose
+      - /app/node_modules
+    env_file:
+      - ./env/backend.env
+    # backend depends on a running mongodb service
+    depends_on:
+      - mongodb
+
   # frontend:
 
+# all named volumes (NO bind mounts) must be listed at the bottom as top level volume keys
 volumes:
   data:
+  logs:
