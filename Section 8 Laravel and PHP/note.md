@@ -31,8 +31,8 @@
 - In yaml file, build new images as per composer.dockerfile
 - Use Bind Mounts to pass source code to container `./src:/var/www/html`
 
-## Run single container (composer) from yaml using utility container
-- Use composer to install laravel
+## Use composer to install laravel
+- Run single container (composer) from yaml using utility container
 - Run `docker-compose run --rm composer create-project --prefer-dist laravel/laravel .`
 - "." referss to the `/var/www/html` folder inside container, and will be reflected in local `src` folder thanks to the Bind Mounts
 
@@ -41,3 +41,13 @@
 - Use docker-compose to run selected services `docker-compose up -d --build server php mysql`
 - `--build` force docker-compose to re-build image if something changes
 - In yaml add `depends_on: php mysql` to server, then only need to run `docker-compose up -d --build server`
+
+## Add artisan container
+- In yaml file, build artisan image as per `php.dockerfile` (artisan share same dockerfile with php)
+- Override dockerfile entrypoint in yaml `entrypoint: ["php", "/var/www/html/artisan"]`
+- While the Nginx server is running, test artisan and mysql by migrating data
+- Run `docker-compose run --rm artisan migrate`
+
+## Add npm container
+- In yaml file, pull node image
+- Override working_dir and entrypoint
