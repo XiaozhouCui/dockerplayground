@@ -12,6 +12,7 @@ services:
       - ./env/mongo.env
     # networks: # networks not needed, compose will auto create default network
     #   - goals-net
+
   backend:
     # build: ./backend
     build:
@@ -31,7 +32,17 @@ services:
     depends_on:
       - mongodb
 
-  # frontend:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    # container_name: goals-frontend
 
 # all named volumes (NO bind mounts) must be listed at the bottom as top level volume keys
 volumes:

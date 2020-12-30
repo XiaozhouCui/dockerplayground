@@ -11,3 +11,8 @@
 - Relative path can be used for bind mounts in docker-compose `volumes: ./backend:app`
 - Add `depends_on` for backend, becaulse node app needs mongodb to be up and running first.
 - In db connection string, `mongodb` still works because it is the name of service in yaml, even though the container's name is `compose-01-starting-setup_mongodb_1`
+- To use custom container names, add `container_name: mongodb` to mongodb service in yaml file 
+
+## Interactive mode for docker-composer
+- Add frontend service to yaml file
+- To represent `-it` option in CLI, add `stdin_open: true` and `tty: true` in yaml file
