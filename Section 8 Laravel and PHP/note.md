@@ -21,3 +21,7 @@
 - In yaml file, build new image as per php.dockerfile
 - Use Bind Mounts to pass source code to container `./src:/var/www/html:delegated`
 - `ports: "3000:9000"`. Nginx talks to container at 3000, and php image expose 9000
+
+## Add MySQL container
+- In yaml file, pull image from `mysql:5.7`
+- Add environment variables using `env_file: ./env/mysql.env`
