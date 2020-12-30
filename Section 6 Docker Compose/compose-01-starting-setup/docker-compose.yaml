@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  mongodb:
+    image: "mongo"
+    volumes: 
+      - data:/data/db
+    # environment:
+      # - MONGO_INITDB_ROOT_USERNAME=joe
+      # MONGO_INITDB_ROOT_USERNAME: joe
+      # MONGO_INITDB_ROOT_PASSWORD: secret
+    env_file: 
+      - ./env/mongo.env
+    # networks: not needed, compose will auto create default network
+      # - goals-net 
+  # backend:
+  # frontend:
+
+volumes:
+  data:
