@@ -51,3 +51,10 @@
 ## Add npm container
 - In yaml file, pull node image
 - Override working_dir and entrypoint
+
+## Add Nginx dockerfile
+- Bind Mounts mirroring is good for dev, but not good for prod/deploy
+- To deploy, we need to create a nginx.dockerfile and COPY necessary contents into image
+- In dockerfile, first copy nginx.conf to /etc/nginx/conf.d/, and rename file to default.conf
+- Then copy src folder to /var/www/html
+- Once the docker file is ready, update server in yaml file to point to this dockerfile to build image.
