@@ -18,3 +18,9 @@
 - Rename the image `docker tag node-dep-example-1 xiaozhoucui/node-example-1`
 - Run `docker login` to login to docker hub
 - Run `docker push xiaozhoucui/node-example-1`
+
+## Run and publish the app on EC2 instance
+- In PuTTY, enter `sudo docker run -d --rm -p 80:80 xiaozhoucui/node-example-1`
+- The container is running on the EC2 instance, without installing Node.js
+- In AWS console, go to security group of EC2 instance, add a new inbound rule "HTTP from anywhere"
+- Now the Node app is accessable from the public IP address
