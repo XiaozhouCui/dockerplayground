@@ -34,6 +34,25 @@
 - Force update the local image on EC2 `sudo docker pull xiaozhoucui/node-example-1`
 - Restart the container `sudo docker run -d --rm -p 80:80 xiaozhoucui/node-example-1`
 
-## Close the instance
-- On PuTTY, stop the current container `sudo docker stop ...`
+## Close the EC2 instance
+- On PuTTY, stop the current container `sudo docker stop ...` and then enter `exit`.
 - On AWS console, terminate the EC2 instance.
+
+## Deploy on AWS ECS
+- AWS console -> ECS -> Get Started -> Configure custom container
+- In repo enter `xiaozhoucui/node-example-1`
+- "Advanced container configuration" can set up WORKDIR, CMD and environment variables etc.
+- Once the Container and Task are defined, click "Next" to go to Service, Load Balancer can be added here
+- Click "Next" then go to Cluster, multiple containers can be setup here.
+- Click "Next" to view summary, then click "Create"
+- Once created, go to the task details page, then use the Public IP to access the deployed node app in browser
+
+## Update code on ECS
+- Change the html file on local machine
+- Rebuild the image `docker build -t xiaozhoucui/node-example-1 .`
+- Push to Docker Hub `docker push xiaozhoucui/node-example-1`
+- On AWS, go to task definition page, click "Create New Revision"
+- Keep all the settings and click "Create"
+- After a new revision is created, Select "Update Service" from actions dropdown.
+- Keep all settings, "Skip to review" and then click "Update Service", this will pull latest image and restart the task.
+- Once the new task is created, the old one will be deleted automatically in a while.
