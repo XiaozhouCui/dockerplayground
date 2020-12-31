@@ -24,3 +24,16 @@
 - The container is running on the EC2 instance, without installing Node.js
 - In AWS console, go to security group of EC2 instance, add a new inbound rule "HTTP from anywhere"
 - Now the Node app is accessable from the public IP address
+
+## Push update to the cloud
+- Update the local html file
+- Rebuild the image `docker build -t node-dep-example-1 .`
+- Update the tag `docker tag node-dep-example-1 xiaozhoucui/node-example-1`
+- Push image to Docker Hub `docker push xiaozhoucui/node-example-1`
+- On PuTTY, stop the current container `sudo docker stop ...`
+- Force update the local image on EC2 `sudo docker pull xiaozhoucui/node-example-1`
+- Restart the container `sudo docker run -d --rm -p 80:80 xiaozhoucui/node-example-1`
+
+## Close the instance
+- On PuTTY, stop the current container `sudo docker stop ...`
+- On AWS console, terminate the EC2 instance.
