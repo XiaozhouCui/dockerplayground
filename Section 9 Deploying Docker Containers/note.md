@@ -12,3 +12,9 @@
 - After docker service is started, `docker run` can be used.
 
 ## Push local image to the cloud
+- Go to Docker Hub and create a repository "node-example-1"
+- Before pushing, add a .dockerignore file to exclude node_modules, *.ppk and *.pem
+- Rebuild the image `docker build -t node-dep-example-1 .`
+- Rename the image `docker tag node-dep-example-1 xiaozhoucui/node-example-1`
+- Run `docker login` to login to docker hub
+- Run `docker push xiaozhoucui/node-example-1`
