@@ -107,3 +107,28 @@
 - Go to EC2 -> Load Balancer, copy the "DNS name" to access the API
 - Add `goals--***` to the security group of Load Balancer
 - In EC2 -> Target Groups -> tg, click "Edit" and add enter `/goals` to "Health check path", otherwise the task will frequently stop due to failed health check (too many 404 responses to root url `/`)
+
+## Push updated code to ECS
+- Make change to source code and rebuild image, push image to Docker Hub
+- On ECS, go to Cluster -> Services -> goals-service and click "Update" button
+- On Configure Service screen, tick "Force new deployment" box and Update Service.
+- The task will restart, starting a new container and removing the old one.
+- Once restarted, all database data will be lost. Need to add a `volume`
+
+## Add volume
+- Go to Task Definitions -> goals -> goals:1 then click "Create new revision"
+- Click "Add volume" button at the bottom to open modal
+- Enter `data` as Name, select `EFS` (Elastic File System) as Volume type, 
+- Open a new window for EFS and click "Create file system" to open modal
+- Enter `db-storage` as Name, and select `vpc-...` as Virtual Private Cloud, then click "Customize"
+- Before customizing EFS, go to EC2 -> Security Group -> Create Security Group
+- Name it `efs-sc`, add description `Security group for EFS`, select `vpc-...`, click "Add inbound rule"
+- Choose `NFS` as Type, and select container's `sg-...` as incoming security group, via port `2049`
+- Click "Create security group" button and then the containers can talk to EFS via port `2049`
+- Go back to EFS customize screen, click "Next" goto "Network access", 
+- Select VPC `vpc-...`, Add the newly created security group `efs-sc` to both zones, click "Next" then "Create"
+- EFS created, then go back to "Add volume" page and select `db-storage` as File system ID, click "Add"
+
+## Connect volume to mongodb container
+- Go to mongodb container modal, goto "STORAGE AND LOGGING" header, select `data` volume as Mount point
+- 
