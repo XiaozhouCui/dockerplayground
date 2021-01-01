@@ -137,3 +137,11 @@
 - New revision created, then select "Update Service" under "Action" 
 - Check `Force new deployment` box, select `1.4.0` as Platform version, then click "Update Service"
 - Then all the data will be persisted
+
+# Moving to MongoDB Atlas
+
+## Update backend app
+- In Dockerfile and backend.env add new ENV `MONGODB_NAME=goals-dev`, to switch db between dev and prod
+- In docker-compose.yaml, remove the mongodb service and volume, because it is no longer containerised.
+- In backend.env, replace the username and password with Atlas login details
+- In app.js, update the connection string to link to Atlas
