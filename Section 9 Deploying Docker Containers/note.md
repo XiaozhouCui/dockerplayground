@@ -1,3 +1,4 @@
+# Single container deployment
 ## Connect to EC2 instance
 - Build image from dockerfile and start container, no Bind Mounts in production
 - On AWS, start a new EC2 instance, (Linux AMI t2.micro), create and download key-pair "example-1.pem"
@@ -57,9 +58,10 @@
 - Keep all settings, "Skip to review" and then click "Update Service", this will pull latest image and restart the task.
 - Once the new task is created, the old task (including IP address) will be deleted automatically.
 
-## Multi container deployment
+# Multi container deployment
+## Push goals-node to Docker Hub
 - On AWS, delete service and delete cluster, this will take a couple of minutes
-- On ECS, the service names no longer work as part of the db connection string.
+- On ECS, the service name `mongodb` no longer work as part of the db connection string.
 - If all containers are deployed in the same task, then `localhost` can be used.
 - In Dockerfile, add `ENV MONGODB_URL=mongodb`
 - Build the backend image `docker build -t goals-node ./backend`
@@ -69,7 +71,7 @@
 
 ## Create new ECS task
 - On ECS, click "Create New Claster", then select "Networking only", then click "Next" to configure cluster
-- Enter cluster name `goals-app`, check `Create VPC` box and keep default settings, then click "Create"
+- Enter cluster name `goals-app`, check `Create VPC` box and keep default settings `1.0.0.0.16` and 2 subnets `10.0.1.0/24` and `10.0.0.0/24`, then click "Create"
 - Once created, go to task definitions and click "Create new task". Choose `FARGATE` then click "Next"
 - In config screen, enter `goals` as task definition name, and select "ecsTaskExecutionRole" as task role
 - In task size options, choose smallest `0.5GB` memory and `0.25vCPU`, then click "Add container"
@@ -90,4 +92,14 @@
 - In Config service, choose `FARGATE`, in "Task Definition" drop down, choose `goals`, in "Service name" enter `goals-service`, in "Number of tasks" enter `1`, keep other settings and click "Next step"
 - In Config network, select `vpc-...(10.0.0.0/16)`, in Subnets select both 2 subnets (`10.0.1.0/24` and `10.0.0.0/24`), make sure "Auto-assign public IP" is `ENABLED`
 - Under Load balancing, choose `Application Load Balancer`
-- 
+- Before proceeding, need to create a load balancer first. Click the link "Please create a load balancer in the EC2 Console" to open the "Select load balancer type" page
+- Under "Application Load Balancer" click "Create" to open "Configure Load Balancer" page
+- In "Name" field enter `ecs-lb`, use Port `80`, connect to the save VPC `vpc-...(10.0.0.0/16)`, then check the 2 availability zones. Click "Next" and "Next" again to the Security Groups page
+- Select `Select an existing security group` and tick the default group ID. Click "Next" to config routing
+- Enter `tg` as target group name, select `IP` as "Target type". Click "Next" to register targets
+- EC2 will automatically configure the register targets, click "Next" and then click "Create"
+- Once LB is created, go back to Create Service window, and select `ecs-lb` as "Load balancer name"
+- Select container `goals-backend:80:80` and click "Add to load balancer". 
+- Select `tg` as targe group, click "Next" then click "Next" again then click "Create service"
+- Now go to Cluster -> goals-app -> tasks, we can see the tasks are linked to the created service.
+- Click the running tasks we can see the "Public IP", then we can access the API with Postman
