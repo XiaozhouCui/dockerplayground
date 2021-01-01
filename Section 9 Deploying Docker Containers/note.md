@@ -111,7 +111,7 @@
 ## Push updated code to ECS
 - Make change to source code and rebuild image, push image to Docker Hub
 - On ECS, go to Cluster -> Services -> goals-service and click "Update" button
-- On Configure Service screen, tick "Force new deployment" box and Update Service.
+- On Configure Service screen, tick `Force new deployment` box and Update Service.
 - The task will restart, starting a new container and removing the old one.
 - Once restarted, all database data will be lost. Need to add a `volume`
 
@@ -130,5 +130,10 @@
 - EFS created, then go back to "Add volume" page and select `db-storage` as File system ID, click "Add"
 
 ## Connect volume to mongodb container
-- Go to mongodb container modal, goto "STORAGE AND LOGGING" header, select `data` volume as Mount point
-- 
+- Go to mongodb container modal, goto "STORAGE AND LOGGING" header
+- Select `data` volume and enter container path `/data/db` to bind it. Click "Update", then click "Create"
+
+## Update Service to redeploy
+- New revision created, then select "Update Service" under "Action" 
+- Check `Force new deployment` box, select `1.4.0` as Platform version, then click "Update Service"
+- Then all the data will be persisted
