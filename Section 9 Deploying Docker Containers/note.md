@@ -102,4 +102,8 @@
 - Select container `goals-backend:80:80` and click "Add to load balancer". 
 - Select `tg` as targe group, click "Next" then click "Next" again then click "Create service"
 - Now go to Cluster -> goals-app -> tasks, we can see the tasks are linked to the created service.
-- Click the running tasks we can see the "Public IP", then we can access the API with Postman
+
+## Load Balancer setup
+- Go to EC2 -> Load Balancer, copy the "DNS name" to access the API
+- Add `goals--***` to the security group of Load Balancer
+- In EC2 -> Target Groups -> tg, click "Edit" and add enter `/goals` to "Health check path", otherwise the task will frequently stop due to failed health check (too many 404 responses to root url `/`)
