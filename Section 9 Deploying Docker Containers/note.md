@@ -55,4 +55,8 @@
 - Keep all the settings and click "Create"
 - After a new revision is created, Select "Update Service" from actions dropdown.
 - Keep all settings, "Skip to review" and then click "Update Service", this will pull latest image and restart the task.
-- Once the new task is created, the old one will be deleted automatically in a while.
+- Once the new task is created, the old task (including IP address) will be deleted automatically.
+
+## Multi container deployment
+- On AWS, delete service and delete cluster, this will take a couple of minutes
+- 
