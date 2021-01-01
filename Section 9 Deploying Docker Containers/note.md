@@ -59,4 +59,24 @@
 
 ## Multi container deployment
 - On AWS, delete service and delete cluster, this will take a couple of minutes
-- 
+- On ECS, the service names no longer work as part of the db connection string.
+- If all containers are deployed in the same task, then `localhost` can be used.
+- In Dockerfile, add `ENV MONGODB_URL=mongodb`
+- Build the backend image `docker build -t goals-node ./backend`
+- Create a new repo on Docker Hub `xiaozhoucui/goals-node`
+- Re-tag image `docker tag goals-node xiaozhoucui/goals-node`
+- Push to Docker Hub `docker push xiaozhoucui/goals-node`
+
+## Create new ECS task
+- On ECS, click "Create New Claster", then select "Networking only", then click "Next" to configure cluster
+- Enter cluster name "goals-app", check "Create VPC" and keep default settings, then click "Create"
+- Once created, go to task definitions and click "Create new task". Choose "FARGATE" then click "Next"
+- In config screen, enter `goals` as task definition name, and select "ecsTaskExecutionRole" as task role
+- In task size options, choose smallest `0.5GB` memory and `0.25vCPU`, then click "Add container"
+
+## Add first container: goals-backend
+- In container screen, enter container name `goals-backend`, enter image repo `xiaozhoucui/goals-node`, on Port mappings enter `80`
+- Under ENVIRONMENT header, enter `node,app.js` as Command, enter environment variables as per backend.env, but add `MONGODB_URL=localhost`
+- Under STORAGE AND LOGGING header, no need to add volumne and bind mounts, click "Add" to add container. 
+
+## Add second container: 
