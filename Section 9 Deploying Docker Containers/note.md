@@ -69,14 +69,25 @@
 
 ## Create new ECS task
 - On ECS, click "Create New Claster", then select "Networking only", then click "Next" to configure cluster
-- Enter cluster name "goals-app", check "Create VPC" and keep default settings, then click "Create"
-- Once created, go to task definitions and click "Create new task". Choose "FARGATE" then click "Next"
+- Enter cluster name `goals-app`, check `Create VPC` box and keep default settings, then click "Create"
+- Once created, go to task definitions and click "Create new task". Choose `FARGATE` then click "Next"
 - In config screen, enter `goals` as task definition name, and select "ecsTaskExecutionRole" as task role
 - In task size options, choose smallest `0.5GB` memory and `0.25vCPU`, then click "Add container"
 
 ## Add first container: goals-backend
 - In container screen, enter container name `goals-backend`, enter image repo `xiaozhoucui/goals-node`, on Port mappings enter `80`
 - Under ENVIRONMENT header, enter `node,app.js` as Command, enter environment variables as per backend.env, but add `MONGODB_URL=localhost`
-- Under STORAGE AND LOGGING header, no need to add volumne and bind mounts, click "Add" to add container. 
+- Under STORAGE AND LOGGING header, no need to add volumne and bind mounts, click "Add" to add container 
 
-## Add second container: 
+## Add second container: mongodb
+- Click "Add container" again, then enter name `mongodb`, in "Image" just enter `mongo` the default image, on Port mappings enter `27017`
+- Under ENVIRONMENT header, enter environment variables as per mongo.env
+- Under STORAGE AND LOGGING header, volume will be added to persist data
+- Click "Add" to add container, and go back to the task config screen, then click "Create"
+
+## Add Service to the task
+- Once the task is created, go to goals-app cluster, under "Services" tab click "Create"
+- In Config service, choose `FARGATE`, in "Task Definition" drop down, choose `goals`, in "Service name" enter `goals-service`, in "Number of tasks" enter `1`, keep other settings and click "Next step"
+- In Config network, select `vpc-...(10.0.0.0/16)`, in Subnets select both 2 subnets (`10.0.1.0/24` and `10.0.0.0/24`), make sure "Auto-assign public IP" is `ENABLED`
+- Under Load balancing, choose `Application Load Balancer`
+- 
