@@ -106,7 +106,7 @@
 ## Load Balancer setup
 - Go to EC2 -> Load Balancer, copy the "DNS name" to access the API
 - Add `goals--***` to the security group of Load Balancer
-- In EC2 -> Target Groups -> tg, click "Edit" and add enter `/goals` to "Health check path", otherwise the task will frequently stop due to failed health check (too many 404 responses to root url `/`)
+- In EC2 -> Target Groups -> tg, click "Edit" and add enter `/goals` to "**Health check path**", otherwise the task will frequently stop due to failed health check (too many 404 responses to root url `/`)
 
 ## Push updated code to ECS
 - Make change to source code and rebuild image, push image to Docker Hub
@@ -116,17 +116,17 @@
 - Once restarted, all database data will be lost. Need to add a `volume`
 
 ## Add volume
-- Go to Task Definitions -> goals -> goals:1 then click "Create new revision"
+- Go to Task Definitions -> goals -> goals:1 then click "**Create new revision**"
 - Click "Add volume" button at the bottom to open modal
 - Enter `data` as Name, select `EFS` (Elastic File System) as Volume type, 
 - Open a new window for EFS and click "Create file system" to open modal
-- Enter `db-storage` as Name, and select `vpc-...` as Virtual Private Cloud, then click "Customize"
+- Enter `db-storage` as Name, and select `vpc-...` as Virtual Private Cloud, then click "**Customize**"
 - Before customizing EFS, go to EC2 -> Security Group -> Create Security Group
 - Name it `efs-sc`, add description `Security group for EFS`, select `vpc-...`, click "Add inbound rule"
 - Choose `NFS` as Type, and select container's `sg-...` as incoming security group, via port `2049`
 - Click "Create security group" button and then the containers can talk to EFS via port `2049`
 - Go back to EFS customize screen, click "Next" goto "Network access", 
-- Select VPC `vpc-...`, Add the newly created security group `efs-sc` to both zones, click "Next" then "Create"
+- Select VPC `vpc-...`, Add the newly created security group `efs-sc` to both zones, click "**Next**" then "**Create**"
 - EFS created, then go back to "Add volume" page and select `db-storage` as File system ID, click "Add"
 
 ## Connect volume to mongodb container
@@ -145,3 +145,13 @@
 - In docker-compose.yaml, remove the mongodb service and volume, because it is no longer containerised.
 - In backend.env, replace the username and password with Atlas login details
 - In app.js, update the connection string to link to Atlas
+- Rebuild the image and push to Docker Hub
+
+## Create a new task revision on ECS
+- In EFS, delete the `db-storage`. In EC2, delete the security group `efs-sc`
+- In ECS, go to latest goals task, click **Create new revision**
+- Delete the `mongodb` container by clicking the `x` on the right. Delete the `volume`
+- Click `goals-backend` to open modal, update the ENV, including `MONGODB_NAME=goals`, click **Update**
+- Click **Create** new revision. In **Actions** dropdown, select **Update Service**
+- Check `Force new deployment` box and skip to **Update Service**
+- Now `goals-backend` container is connected to Atlas
