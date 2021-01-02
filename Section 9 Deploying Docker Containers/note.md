@@ -79,7 +79,7 @@
 ## Add first container: goals-backend
 - In container screen, enter container name `goals-backend`, enter image repo `xiaozhoucui/goals-node`, on Port mappings enter `80`
 - Under ENVIRONMENT header, enter `node,app.js` as Command, enter environment variables as per backend.env, but add `MONGODB_URL=localhost`
-- Under STORAGE AND LOGGING header, no need to add volumne and bind mounts, click "Add" to add container 
+- Under STORAGE AND LOGGING header, no need to add volume and bind mounts, click "Add" to add container 
 
 ## Add second container: mongodb
 - Click "Add container" again, then enter name `mongodb`, in "Image" just enter `mongo` the default image, on Port mappings enter `27017`
@@ -155,3 +155,8 @@
 - Click **Create** new revision. In **Actions** dropdown, select **Update Service**
 - Check `Force new deployment` box and skip to **Update Service**
 - Now `goals-backend` container is connected to Atlas
+
+# Add container for React SPA
+
+## Create a "build-only" container
+- Frontend don't need dev server in production, so create a new docker file `Dockerfile.prod`
