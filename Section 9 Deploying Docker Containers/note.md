@@ -176,5 +176,15 @@
 - Push image to Docker Hub `docker push xiaozhoucui/goals-react`
 
 ## Deploy a standalone frontend app
-- Make sure `docker-compose up` starts dev mode on local machine, saving data to `goals-dev` DB on Atlas
-- 
+- Make sure `docker-compose up` starts dev mode on `localhost:3000`, saving data to `goals-dev` DB on Atlas
+- Because both node and nginx (frontend) running on port `80` will clash, need to create a new ECS task
+- Click **Create new task definition**, select `FARGATE`, name the task `goals-react`
+- Select minimum CPU and Memory, click **Add container**, 
+- Name the container `goals-react`, use image `xiaozhoucui/goals-react`, set port `80`, click **Add**
+- After adding container, click **Create** to create task `goals-react`
+- Goto EC2 and create a new Load Balancer `goals-react-lb`, use same `VPC` and same `Security Group` as node
+- Create a target group `react-tg`, select `IP`, skip to **Create**. Grab its URL once LB is created
+- Go back to ECS task `goals-react:1` and click **Create Service**
+- Select `FARGATE`, name service `goals-react`, set Number of tasks `1`, select VPC and subnets, click **Edit** security groups and select the existing `sg-...` and save, select `Aplication Load Balancer` radio, select newly created Load Balancer `goals-react-lb`, click **Add to load balancer**, then select target group `react-tg`, then skip to **Create Service** button.
+- New service `goals-react` will run side by side with `goals-service` under ECS **Clusters**
+- Now the react app can be accessed from the URL in EC2 Load Balancer
