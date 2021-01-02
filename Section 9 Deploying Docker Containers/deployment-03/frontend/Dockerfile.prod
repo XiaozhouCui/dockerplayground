@@ -1,0 +1,28 @@
+# Pull node image as STAGE-1
+FROM node:14-alpine as build
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+# EXPOSE 3000
+
+# CMD [ "npm", "start" ]
+
+# This will create a folder "/app/build"
+RUN npm run build
+
+# Once built, node is no longer needed, now switch to another image as STAGE-2
+FROM nginx:stable-alpine
+
+# Copy the "/app/build" folder from from the above image into the nginx file syetem
+# "/usr/share/nginx/html" is the default folder where nginx serve files
+COPY --from=build /app/build /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

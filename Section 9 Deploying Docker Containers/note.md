@@ -160,3 +160,10 @@
 
 ## Create a "build-only" container
 - Frontend don't need dev server in production, so create a new docker file `Dockerfile.prod`
+- To serve the build files, need to use **Multi-Stage Builds**
+- In dockerfile.prod, add `FROM node:14-alpine as build` as **STAGE-1**
+- Remove `EXPOSE` and `CMD` layers, add `RUN npm run build`
+- Once built, node server is no longer needed, now switch to another image
+- **STAGE-2**, add `FROM nginx:stable-alpine`
+- Copy built files from Stage-1 file system into Stage-2 file system `COPY --from=build /app/build /usr/share/nginx/html`
+- Expose port `80` and run nginx server and
