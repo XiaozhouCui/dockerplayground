@@ -159,9 +159,10 @@
 # Add container for React SPA
 
 ## Create a "build-only" container
-- Frontend don't need dev server in production, so create a new docker file `Dockerfile.prod`
-- To serve the build files, need to use **Multi-Stage Builds**
-- In dockerfile.prod, add `FROM node:14-alpine as build` as **STAGE-1**
+- Original `Dockerfile` is used by docker-compose in **Development Mode**
+- Create a new docker file `Dockerfile.prod` for production mode
+- To serve and expose the built files, need to use **Multi-Stage Builds**
+- **STAGE-1**, in dockerfile.prod, use `FROM node:14-alpine as build` to run npm build process
 - Remove `EXPOSE` and `CMD` layers, add `RUN npm run build`
 - Once built, node server is no longer needed, now switch to another image
 - **STAGE-2**, add `FROM nginx:stable-alpine`, intermediate container from **STAGE-1** will be removed
@@ -169,7 +170,11 @@
 - Expose port `80` and run nginx server and
 
 ## Prepare frontend image for deployment
-- Replace all `http://localhost/goals` with `/goals` because it will be deployed on the same host as REST API
+- Replace all `http://localhost/goals` with `backendUrl + '/goals'` because it will be deployed separately
 - On Docker Hub, create a new repo `xiaozhoucui/goals-react`
 - Build multi-stage image using 2 docker files, go to parent path of "frontend" folder, run `docker build -f frontend/Dockerfile.prod -t xiaozhoucui/goals-react ./frontend`
 - Push image to Docker Hub `docker push xiaozhoucui/goals-react`
+
+## Deploy a standalone frontend app
+- Make sure `docker-compose up` starts dev mode on local machine, saving data to `goals-dev` DB on Atlas
+- 
