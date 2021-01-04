@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector: # choose which pods will be part of this service
+    app: second-app # label of pods
+  ports: # ports to be exposed
+    - protocol: "TCP"
+      port: 80 # external port
+      targetPort: 8080 # container internal port, app.js listener
+    # - protocol: "TCP"
+    #   port: 443
+    #   targetPort: 443
+  type: LoadBalancer # can also be "ClusterIP" or "NodeIP"
+---
+# "---" separator mean a brand new object starts
+# Find latest api version from k8s official website
+apiVersion: apps/v1
+# Other kind include "Job" and "Service"
+kind: Deployment
+# Deployment is an object, need metadata
+metadata:
+  name: second-app-deployment
+spec: # Deployment spec
+  replicas: 1 # number of pods
+  selector:
+    matchLabels: # match the labes in template
+      app: second-app
+      tier: backend
+  template: # Deployment always uses Pod template
+    metadata: # pod is an object, need metadata
+      labels: # labels are used with selectors
+        app: second-app # can be any key-value pairs
+        tier: backend
+    spec: # Pod spec
+      containers:
+        - name: second-node
+          image: xiaozhoucui/kub-first-app:2
+        # - name: ...
+        #   image: ...

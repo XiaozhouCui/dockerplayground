@@ -76,3 +76,13 @@
 - Run `kubectl get services` will see the `backend` juse created
 - To expose the service, run `minikube service backend`, node app will show up in browser
 - The declarative method (yaml file) is more popular than commands, which are easy to miss args
+
+## Update and delete resources
+- To scale up or down, simply update yaml file `replicas: 3`, then apply `kubectl apply -f deployment.yaml`
+- To change image, update `image: xiaozhoucui/kub-first-app`, then apply `kubectl apply -f deployment.yaml`
+- To delete the resources created by yaml files, run `kubectl delete -f deployment.yaml -f service.yaml`
+
+## Single config file
+- Create a new file `all-in-one.yaml`, copy the content from other yaml files and separate with `---`
+- Make sure the `service` object is in front of `deployment` object
+- Run `kubectl apply -f all-in-one.yaml` to create both objects
