@@ -36,3 +36,11 @@
 - There will be 3 pods running, run `kubectl get pods` to find out
 - Load Balancer will dirtribute traffic evenly to these 3 pods. If one pod crashes, others will keep working
 - To scale down, run `kubectl scale deployment/first-app --replicas=1`
+
+## Updating deployments (source code)
+- Update the source code in *app.js*
+- Rebuild the image **with a new tag ":2"** `docker build -t xiaozhoucui/kub-first-app:2 .`
+- Push image to docker hub `docker push xiaozhoucui/kub-first-app:2`
+- To update k8s image, run `kubectl set image deployment/first-app kub-first-app=xiaozhoucui/kub-first-app:2`
+- To update deployment, run `kubectl rollout status deployment/first-app`
+- A new pod will be up and running, the old pod will be removed. New content can be access via browser
