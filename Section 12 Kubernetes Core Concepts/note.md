@@ -20,3 +20,6 @@
 - K8s need to pull image from Docker Hub. Goto Docker Hub and create a repo `xiaozhoucui/kub-first-app`
 - Retag the local image `docker tag kub-first-app xiaozhoucui/kub-first-app`
 - Push the image to Docker Hub `docker push xiaozhoucui/kub-first-app`
+- Run `kubectl create deployment first-app --image=xiaozhoucui/kub-first-app` to pull image from docker hub
+- After a while, the deployment will be created. Check it with `kubectl get deployments` and `kubectl get pods`
+- Run `minikube dashboard` to open the dashboard in browser, deployments and pods can be inspected here
