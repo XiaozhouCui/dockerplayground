@@ -44,3 +44,18 @@
 - To update k8s image, run `kubectl set image deployment/first-app kub-first-app=xiaozhoucui/kub-first-app:2`
 - To update deployment, run `kubectl rollout status deployment/first-app`
 - A new pod will be up and running, the old pod will be removed. New content can be access via browser
+
+## Deployment Rollbacks and History
+- Intentionally make a mistake, pulling an image that doesn't exist. `kubectl set image deployment/first-app kub-first-app=xiaozhoucui/kub-first-app:3`
+- Rollout the faulty image `kubectl rollout status deployment/first-app`
+- Old pod will not terminate until the new pod is up and running, so the node app still works
+- Run `kubectl get pods` to find the failed pod with status `ImagePullBackOff`
+- To **un-do** the latest deployment, run `kubectl rollout undo deployment/first-app`
+- Once rolled back, the faile pod will be removed
+- To list the rollout history of a deployment, run `kubectl rollout history deployment/first-app`
+- To find the image of a certain revision, run `kubectl rollout history deployment/first-app --revision=3`
+- To rollback to a sepcific revision, run `kubectl rollout undo deployment/first-app --to-revision=1`
+
+## Delete the service and deployment
+- Run `kubectl delete service first-app` to delete service
+- Run `kubectl delete deployment first-app`
