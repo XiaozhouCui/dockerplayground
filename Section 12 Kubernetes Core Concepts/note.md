@@ -58,4 +58,13 @@
 
 ## Delete the service and deployment
 - Run `kubectl delete service first-app` to delete service
-- Run `kubectl delete deployment first-app`
+- Run `kubectl delete deployment first-app` to delete deployment
+
+## Deployment Configuration File
+- Create a new file `deployment.yaml`
+- Inside the yaml file, create a minimal deployment with one pod using one image
+- Run `kubectl apply -f="deployment.yaml"`
+- This attemp will fail because the field **slelector** is missing in yaml file
+- Add `selector` and match the labels in `template`
+- Run `kubectl apply -f="deployment.yaml"` it should work
+- Run `kubectl get deployments` will find the `second-app-deployment` up and running

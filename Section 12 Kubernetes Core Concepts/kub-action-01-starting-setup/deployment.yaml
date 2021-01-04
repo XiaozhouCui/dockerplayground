@@ -1,0 +1,24 @@
+# Find latest api version from k8s official website
+apiVersion: apps/v1
+# Other kind include "Job" and "Service"
+kind: Deployment
+# Deployment is an object, need metadata
+metadata:
+  name: second-app-deployment
+spec: # Deployment spec
+  replicas: 1 # number of pods
+  selector:
+    matchLabels: # match the labes in template
+      app: second-app
+      tier: backend
+  template: # Deployment always uses Pod template
+    metadata: # pod is an object, need metadata
+      labels: # labels are used with selectors
+        app: second-app # can be any key-value pairs
+        tier: backend
+    spec: # Pod spec
+      containers:
+        - name: second-node
+          image: xiaozhoucui/kub-first-app:2
+        # - name: ...
+        #   image: ...
