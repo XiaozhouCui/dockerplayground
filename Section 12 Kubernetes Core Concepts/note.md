@@ -10,4 +10,13 @@
 - Deployments can be scaled dynamically, when metrics (incoming trafic, CPU etc.) are exceeded, k8s create more pods
 
 ## First Deployment Object
-- 
+- Run `minikube status` to check if k8s cluster is running, if not, run `minikube start --driver-docker`
+- Build node app image with dockerfile `docker build -t kub-first-app .`
+- Run `kubectl help` to brows all commands
+- Create a **deployment object**, run `kubectl create deployment first-app --image=kub-first-app`
+- Run `kubectl get deployments` to see all the deployments, `kubectl get deployments` to see all pods
+- Pods shows `ErrImagePull` because K8s can't read image on local machine
+- Delete the failed deployments `kubectl delete deployment first-app`
+- K8s need to pull image from Docker Hub. Goto Docker Hub and create a repo `xiaozhoucui/kub-first-app`
+- Retag the local image `docker tag kub-first-app xiaozhoucui/kub-first-app`
+- Push the image to Docker Hub `docker push xiaozhoucui/kub-first-app`
