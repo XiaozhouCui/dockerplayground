@@ -61,10 +61,18 @@
 - Run `kubectl delete deployment first-app` to delete deployment
 
 ## Deployment Configuration File
-- Create a new file `deployment.yaml`
+- Create a new file `deployment.yaml`, name the deployment `second-app-deployment`
 - Inside the yaml file, create a minimal deployment with one pod using one image
 - Run `kubectl apply -f="deployment.yaml"`
 - This attemp will fail because the field **slelector** is missing in yaml file
 - Add `selector` and match the labels in `template`
-- Run `kubectl apply -f="deployment.yaml"` it should work
+- Run `kubectl apply -f deployment.yaml` it should work
 - Run `kubectl get deployments` will find the `second-app-deployment` up and running
+
+## Service yaml file
+- Create a new file `service.yaml`, name the service `backend`
+- Inside the yaml file, choose which pods will be part of this service
+- Run `kubectl apply -f service.yaml`
+- Run `kubectl get services` will see the `backend` juse created
+- To expose the service, run `minikube service backend`, node app will show up in browser
+- The declarative method (yaml file) is more popular than commands, which are easy to miss args
