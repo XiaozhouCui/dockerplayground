@@ -30,3 +30,9 @@
 - To check the created service, run `kubectl get services`
 - To access the service from local machine, run `minikube service first-app` to open node app on browser
 - On browser, goto `/error` to crash the app, then the pod will restart
+
+## Scaling
+- To create multiple instances pods/containers, run `kubectl scale deployment/first-app --replicas=3`
+- There will be 3 pods running, run `kubectl get pods` to find out
+- Load Balancer will dirtribute traffic evenly to these 3 pods. If one pod crashes, others will keep working
+- To scale down, run `kubectl scale deployment/first-app --replicas=1`
