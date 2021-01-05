@@ -28,6 +28,8 @@ spec:
       volumes:
         - name: story-volume
           # emptyDir: {} # volume type
-          hostPath: # volume type
-            path: /data # like Bind Mounts in docker
-            type: DirectoryOrCreate
+          # hostPath: # volume type
+          #   path: /data # like Bind Mounts in docker
+          #   type: DirectoryOrCreate
+          persistentVolumeClaim:
+            claimName: host-pvc

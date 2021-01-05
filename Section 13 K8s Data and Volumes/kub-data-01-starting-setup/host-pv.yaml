@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: host-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem # another volume mode is "Block"
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce # this is the only supported mode for type "DirectoryOrCreate"
+    # - ReadOnlyMany
+    # - ReadWriteMany
+  hostPath:
+    path: /data
+    type: DirectoryOrCreate
