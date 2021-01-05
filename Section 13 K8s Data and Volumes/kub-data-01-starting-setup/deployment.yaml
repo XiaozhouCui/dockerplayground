@@ -14,8 +14,15 @@ spec:
     spec:
       containers:
         - name: story
-          image: xiaozhoucui/kub-data-demo:1
+          image: xiaozhoucui/kub-data-demo
           imagePullPolicy: Always
+          env:
+            - name: STORY_FOLDER
+              # value: "story" # story is hardecoded
+              valueFrom: # use value from environment.yaml 
+                configMapKeyRef:
+                  name: data-store-env
+                  key: folder
           volumeMounts:
             - mountPath: /app/story # path of the text file in container
               name: story-volume

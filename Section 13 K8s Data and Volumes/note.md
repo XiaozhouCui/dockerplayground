@@ -28,3 +28,12 @@
 - To use a Claim in a Pod, first run `kubectl apply -f host-pv.yaml`, then run `kubectl apply -f host-pvc.yaml`
 - Persistent volumes and claims can be seen by running `kubectl get pv` and `kubectl get pvc`
 - Apply the deployment `kubectl apply -f deployment.yaml` to use the persistent volume `host-pv` as pod's volume
+
+## Environment Variables
+- In app.js, replace `story` folder with `process.env.STORY_FOLDER`
+- In deployment.yaml add `env`, then add key-value pairs under `env`
+- Rebuild the image, upload to docker hub, reapply deployment.yaml, the app will work as before
+- Environment variables can be extracted into a **ConfigMap** yaml file `environment.yaml`
+- Name configMap `data-store-env`, add `folder: "story"`, then apply it `kubectl apply -f environment.yaml`
+- To check the config maps, run `kubectl get configmap`
+- In deployment.yaml, replace `value` with `valueFrom`
