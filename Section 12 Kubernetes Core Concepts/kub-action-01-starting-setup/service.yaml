@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend
+  labels:
+    group: example
 spec:
   selector: # choose which pods will be part of this service
     app: second-app # label of pods

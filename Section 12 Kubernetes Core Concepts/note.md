@@ -86,3 +86,9 @@
 - Create a new file `all-in-one.yaml`, copy the content from other yaml files and separate with `---`
 - Make sure the `service` object is in front of `deployment` object
 - Run `kubectl apply -f all-in-one.yaml` to create both objects
+
+## Labels and selectors
+- Add label `group: example` to both service and deployment yaml file
+- Start the deployment and service `kubectl apply -f deployment.yaml -f service.yaml`
+- Can select resources by label (`group: exmaple`), not only by name (`second-app-deployment`)
+- To delete resource by label (group), run `kubectl delete deployments,services -l group=example`

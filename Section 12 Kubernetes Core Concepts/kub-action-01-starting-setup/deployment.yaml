@@ -5,12 +5,16 @@ kind: Deployment
 # Deployment is an object, need metadata
 metadata:
   name: second-app-deployment
+  labels:
+    group: example
 spec: # Deployment spec
   replicas: 1 # number of pods
   selector:
     matchLabels: # match the labes in template
       app: second-app
       tier: backend
+    # matchExpressions:
+    #   - { key: app, operator: In, values: [second-app, first-app] }
   template: # Deployment always uses Pod template
     metadata: # pod is an object, need metadata
       labels: # labels are used with selectors
