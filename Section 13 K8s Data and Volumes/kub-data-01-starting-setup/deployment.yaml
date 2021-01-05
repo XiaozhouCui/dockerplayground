@@ -13,11 +13,19 @@ spec:
         app: story
     spec:
       containers:
-      - name: story
-        image: xiaozhoucui/kub-data-demo
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        # ports:
-        # - containerPort: <Port>
+        - name: story
+          image: xiaozhoucui/kub-data-demo:1
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /app/story # path of the text file in container
+              name: story-volume
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          # ports:
+          # - containerPort: <Port>
+      volumes:
+        - name: story-volume
+          emptyDir: {} # volume type
+              
