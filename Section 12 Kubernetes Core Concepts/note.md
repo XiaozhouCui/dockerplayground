@@ -92,3 +92,9 @@
 - Start the deployment and service `kubectl apply -f deployment.yaml -f service.yaml`
 - Can select resources by label (`group: exmaple`), not only by name (`second-app-deployment`)
 - To delete resource by label (group), run `kubectl delete deployments,services -l group=example`
+
+## imagePullPolicy
+- Add `imagePullPolicy: Always` to the deployment.yaml, it will always pull the latest image, even if the tag in `image` in yaml file is not changed
+- Change app.js, and rebuild image `xiaozhoucui/kub-first-app:2`, push image to docker hub
+- Rerun the yaml file `kubectl apply -f deployment.yaml`
+- The old pod will terminate and the new pod with updated image will start.

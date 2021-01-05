@@ -24,5 +24,12 @@ spec: # Deployment spec
       containers:
         - name: second-node
           image: xiaozhoucui/kub-first-app:2
+          imagePullPolicy: Always # always pull the latest image
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 10
+            initialDelaySeconds: 5
         # - name: ...
         #   image: ...

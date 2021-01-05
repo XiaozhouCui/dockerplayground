@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend
+  labels:
+    group: example
 spec:
   selector: # choose which pods will be part of this service
     app: second-app # label of pods
@@ -22,12 +24,16 @@ kind: Deployment
 # Deployment is an object, need metadata
 metadata:
   name: second-app-deployment
+  labels:
+    group: example
 spec: # Deployment spec
   replicas: 1 # number of pods
   selector:
     matchLabels: # match the labes in template
       app: second-app
       tier: backend
+    # matchExpressions:
+    #   - { key: app, operator: In, values: [second-app, first-app] }
   template: # Deployment always uses Pod template
     metadata: # pod is an object, need metadata
       labels: # labels are used with selectors
@@ -37,5 +43,12 @@ spec: # Deployment spec
       containers:
         - name: second-node
           image: xiaozhoucui/kub-first-app:2
+          imagePullPolicy: Always # always pull the latest image
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 10
+            initialDelaySeconds: 5
         # - name: ...
         #   image: ...
