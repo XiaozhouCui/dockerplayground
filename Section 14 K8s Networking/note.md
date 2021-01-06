@@ -14,7 +14,7 @@
 - Apply the service `kubectl apply -f users-service.yaml`
 - Use minikube to run the service `minikube service users-service`, then use the URL in Postman
 
-## Pod-internal communication
+## Pod-internal communication: users-api and auth-api
 - users-api and auth-api are in the same pod (same deployment)
 - In local machine docker-compose, service name `auth` is used in URL `http://auth/...`
 - In docker-compose.yaml, add environment `AUTH_ADDRESS: auth`
@@ -50,9 +50,20 @@
 - Reapply the yaml file `kubectl apply -f users-deployment.yaml`, Post requests shouls still work
 - Note that env `AUTH_ADDRESS: "10.107.88.2"` in yaml file is no longer used
 
-## Use internal domain name for Pod-to-Pod communication
-- Instead of IP or env, we can use K8s (CoreDNS) internal domain name to refer to a service
+## Use internal domain name (Recommended) for Pod-to-Pod communication
+- Instead of IP or env, we can use K8s (CoreDNS) **auto generated** internal domain name to refer to a service
 - In the signup URL in users-app.js, change the env back to `AUTH_ADDRESS`, repush to docker hub
-- In users-deployment.yaml, update the env `AUTH_ADDRESS: "auth-service.default"`
+- In users-deployment.yaml, update the env `AUTH_ADDRESS: "auth-service.default"`, *service-name.name-space*
 - Re-apply the yaml file `kubectl apply -f users-deployment.yaml` 
 - Post requests should still work for /signup
+
+## Communication from tasks-api to auth-api
+- In tasks-app.js, replace the `auth` in request URL with `process.env.AUTH_ADDRESS`
+- In docker-compose.yaml, add `AUTH_ADDRESS: auth` under env of `tasks` service
+- Create `tasks-deployment.yaml` and `tasks-service.yaml`
+- On docker hub, create `xiaozhoucui/kub-demo-tasks`
+- Goto tasks-api/ folder, build image `docker build -t xiaozhoucui/kub-demo-tasks .`, push to docker hub
+- Goto kubernetes/ folder, apply tasks resources `kubectl apply -f tasks-service.yaml -f tasks-deployment.yaml`
+- To start the tasks service, run `minikube service tasks-service`
+- Send POST request `{"text": "asdf", "title": "asdf"}` to new URL `http://localahost:*****/tasks`, with auth header `Authorization: Bearer abc`, the tasks should be stored. Send GET req to the same url to fetch tasks
+- Now the tasks-api can talk to internal auth-api via `AUTH_ADDRESS: "auth-service.default"`
