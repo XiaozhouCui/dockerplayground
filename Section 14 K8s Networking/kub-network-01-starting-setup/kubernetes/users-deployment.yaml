@@ -17,7 +17,8 @@ spec:
           image: xiaozhoucui/kub-demo-users:latest
           env:
             - name: AUTH_ADDRESS
-              value: "10.107.88.2"
+              # value: "10.107.88.2"
+              value: "auth-service.default" # CoreDNS domain: [k8s service name].[k8s namespace]
           resources:
             limits:
               memory: "128Mi"

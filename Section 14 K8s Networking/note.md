@@ -29,7 +29,7 @@
 - Now there will be **2** containers running in the same pod: users-api and auth-api
 - In Postman, send POST request to `http://127.0.0.1:*****/signup` it should respond `User created!`, meaning 2 containers inside 1 pod can talk to each other successfully
 
-## Pod-to-Pod communication
+## Use IP Address for Pod-to-Pod communication
 - Move auth-api into a separate pod, so the users-api and auth-api no longer run in same pod
 - Create a new yaml file `auth-deployment.yaml`, name the pod `auth`
 - Remove the auth container from `users-deployment.yaml`
@@ -38,6 +38,8 @@
 - Run `kubectl apply -f auth-service.yaml -f auth-deployment.yaml` to start the service
 - Use `kubectl get service` to get the IP address for the auth-service, use this IP address `"10.107.88.2"` to replace the env `localhost` inside users-deployment.yaml.
 - Apply the updated yaml file `kubectl apply -f users-deployment.yaml`, there will be 2 pods running, each containing 1 container. Post requests should still work for /login and /signup
+
+## Use environment variables for Pod-to-Pod communication
 - To avoid using hard-coded IP address in yaml files, use the K8s **auto generated** env variables to replace `process.env.AUTH_ADDRESS`
 - In K8s, the IP address for service `auth-service` is stored in variable `AUTH_SERVICE_SERVICE_HOST`
 - In K8s, the IP address for service `users-service` is stored in variable `USERS_SERVICE_SERVICE_HOST`
@@ -47,3 +49,10 @@
 - Go back to kuberetes folder, delete the running deployment `kubectl delete -f users-deployment.yaml`
 - Reapply the yaml file `kubectl apply -f users-deployment.yaml`, Post requests shouls still work
 - Note that env `AUTH_ADDRESS: "10.107.88.2"` in yaml file is no longer used
+
+## Use internal domain name for Pod-to-Pod communication
+- Instead of IP or env, we can use K8s (CoreDNS) internal domain name to refer to a service
+- In the signup URL in users-app.js, change the env back to `AUTH_ADDRESS`, repush to docker hub
+- In users-deployment.yaml, update the env `AUTH_ADDRESS: "auth-service.default"`
+- Re-apply the yaml file `kubectl apply -f users-deployment.yaml` 
+- Post requests should still work for /signup
