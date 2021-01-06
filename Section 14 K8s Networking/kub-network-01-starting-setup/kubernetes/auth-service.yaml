@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector: # pods
+    app: auth
+  type: ClusterIP # No access to outside world. Other types are LoadBalancer and NodePort
+  ports:
+    - protocol: "TCP"
+      port: 80 # outside port
+      targetPort: 80 # inside port

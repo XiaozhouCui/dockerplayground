@@ -1,23 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: users-deployment
+  name: auth-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: users
+      app: auth
   template:
     metadata:
       labels:
-        app: users
+        app: auth
     spec:
       containers:
-        - name: users
-          image: xiaozhoucui/kub-demo-users:latest
-          env:
-            - name: AUTH_ADDRESS
-              value: "10.107.88.2"
+        - name: auth
+          image: xiaozhoucui/kub-demo-auth:latest
           resources:
             limits:
               memory: "128Mi"
