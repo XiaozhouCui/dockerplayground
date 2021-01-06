@@ -68,7 +68,7 @@
 - Send POST request `{"text": "asdf", "title": "asdf"}` to new URL `http://localahost:*****/tasks`, with auth header `Authorization: Bearer abc`, the tasks should be stored. Send GET req to the same url to fetch tasks
 - Now the tasks-api can talk to internal auth-api via `AUTH_ADDRESS: "auth-service.default"`
 
-## Adding a containerised Frontend
+## Adding a containerised Frontend with docker
 - Make sure `CORS` headers are added in tasks-app.js, to allow browser requests
 - The frontend dockerfile can build a multi-stage image for production build
 - In frontend App.js, replace the fetch URL with `http://localahost:*****/tasks` from minikube service
@@ -76,3 +76,11 @@
 - Use **docker** to start container `docker run --rm -d d-p 80:80 xiaozhoucui/kub-demo-frontend`
 - Open browser, goto `localhost` should load the app, post and fetch tasks
 - Run `docker stop ***` to stop and remove the container
+
+## Deploy frontend on k8s
+- Create a repo on docker hub `xiaozhoucui/kub-demo-frontend`
+- Add a new deployment yaml file `frontend-deployment.yaml`
+- Add a service `frontend-service.yaml` to expose frontend with LoadBalancer
+- Run `kubectl apply -f frontend-service.yaml -f frontend-deployment.yaml`
+- Start the minikube service for frontend `minikube service frontend-service`
+- The browser should open with the frontend end app working well
