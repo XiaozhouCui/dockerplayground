@@ -27,7 +27,7 @@
 - In users-deployment.yaml, add env `AUTH_ADDRESS: localhost`
 - Goto kubernetes folder and apply the updated yaml `kubectl apply -f users-deployment.yaml`
 - Now there will be **2** containers running in the same pod: users-api and auth-api
-- In Postman, send POST request to `http://127.0.0.1:*****/signup` it should respond `User created!`, meaning 2 containers inside 1 pod can talk to each other successfully
+- In Postman, send POST request to `http://127.0.0.1:62422/signup` it should respond `User created!`, meaning 2 containers inside 1 pod can talk to each other successfully
 
 ## Use IP Address for Pod-to-Pod communication
 - Move auth-api into a separate pod, so the users-api and auth-api no longer run in same pod
@@ -65,13 +65,13 @@
 - Goto tasks-api/ folder, build image `docker build -t xiaozhoucui/kub-demo-tasks .`, push to docker hub
 - Goto kubernetes/ folder, apply tasks resources `kubectl apply -f tasks-service.yaml -f tasks-deployment.yaml`
 - To start the tasks service, run `minikube service tasks-service`
-- Send POST request `{"text": "asdf", "title": "asdf"}` to new URL `http://localahost:*****/tasks`, with auth header `Authorization: Bearer abc`, the tasks should be stored. Send GET req to the same url to fetch tasks
+- Send POST request `{"text": "asdf", "title": "asdf"}` to new URL `http://127.0.0.1:62422/tasks`, with auth header `Authorization: Bearer abc`, the tasks should be stored. Send GET req to the same url to fetch tasks
 - Now the tasks-api can talk to internal auth-api via `AUTH_ADDRESS: "auth-service.default"`
 
 ## Adding a containerised Frontend with docker
 - Make sure `CORS` headers are added in tasks-app.js, to allow browser requests
 - The frontend dockerfile can build a multi-stage image for production build
-- In frontend App.js, replace the fetch URL with `http://localahost:*****/tasks` from minikube service
+- In frontend App.js, replace the fetch URL with `http://127.0.0.1:62422/tasks` from minikube service
 - Goto frontend/ folder, run `docker build -t xiaozhoucui/kub-demo-frontend .`
 - Use **docker** to start container `docker run --rm -d d-p 80:80 xiaozhoucui/kub-demo-frontend`
 - Open browser, goto `localhost` should load the app, post and fetch tasks
@@ -84,3 +84,17 @@
 - Run `kubectl apply -f frontend-service.yaml -f frontend-deployment.yaml`
 - Start the minikube service for frontend `minikube service frontend-service`
 - The browser should open with the frontend end app working well
+
+## Use Nginx Reverse Proxy for the frontend
+- In frontend App.js, fetch URL is still hard-coded `http://127.0.0.1:62422/tasks`
+- To add a Reverse Proxy, goto nginx.conf, add `location /api { proxy_pass http://127.0.0.1:62422 }`
+- This will redirect all frontend req starting with `/api` to `http://127.0.0.1:62422`
+- In frontend App.js, replace all `http://127.0.0.1:62422/tasks` with `/api/tasks`
+- Goto frontend folder, rebuild image and push to docker hub
+- Goto kubernetes folder, delete and re-apply frontend-deployment.yaml
+- Frontend app works but fetch will fail
+- Goto nginx.conf, update with internal domain name for tasks service `http://tasks-service.default:8000`, because nginx.conf is running on server and has access to the k8s cluster's internal domain name
+- Goto frontend folder, rebuild image and push to docker hub
+- Goto kubernetes folder, delete and re-apply frontend-deployment.yaml
+- Now goto the frontend app in browser, then the HTTP requests should work
+- With Reverse Proxy, we no longer need to grab and enter hard-coded IP addresses
