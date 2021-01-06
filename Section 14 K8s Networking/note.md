@@ -15,4 +15,16 @@
 - Use minikube to run the service `minikube service users-service`, then use the URL in Postman
 
 ## Pod-internal communication
-- 
+- users-api and auth-api are in the same pod (same deployment)
+- In local machine docker-compose, service name `auth` is used in URL `http://auth/...`
+- In docker-compose.yaml, add environment `AUTH_ADDRESS: auth`
+- In k8s, an environment variable `process.env.AUTH_ADDRESS` is used in URL to replace `auth`
+- To make a running auth-api, create a docker hub repo `xiaozhoucui/kub-demo-auth` goto auth-api/ folder, build image and push to docker hub
+- To make sure user-api and auth-api are in one pod, go to users-deployment.yaml and add **a second container** `auth`. 
+- Don't add auth to the service.yaml because auth-api is pod-internal, no need to expose port for auth-api
+- Goto users-api folder, rebuild image and push to `xiaozhoucui/kub-demo-users`
+- In k8s, `localhost` can be used when the containers are in the same pod
+- In users-deployment.yaml, add env `AUTH_ADDRESS: localhost`
+- Goto kubernetes folder and apply the updated yaml `kubectl apply -f users-deployment.yaml`
+- Now there will be **2** containers running in the same pod: users-api and auth-api
+- In Postman, send POST request to `http://127.0.0.1:*****/signup` it should respond `User created!`

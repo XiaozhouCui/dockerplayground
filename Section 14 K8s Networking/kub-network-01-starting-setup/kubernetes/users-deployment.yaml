@@ -14,11 +14,17 @@ spec:
     spec:
       containers:
         - name: users
-          image: xiaozhoucui/kub-demo-users
-          imagePullPolicy: Always
+          image: xiaozhoucui/kub-demo-users:latest
+          env:
+            - name: AUTH_ADDRESS
+              value: localhost
           resources:
             limits:
               memory: "128Mi"
               cpu: "500m"
-          # ports:
-          #   - containerPort: <Port>
+        - name: auth
+          image: xiaozhoucui/kub-demo-auth:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
