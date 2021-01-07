@@ -52,7 +52,8 @@
 
 ## Apply yaml files on EKS
 - Make sure image path in yaml files are updated, and images are pushed to docker hub
-- Go to kubernetes folder, run `kubectl apply -f auth.yaml -f users.yaml`, this will also create EC2 LoadBalancer
+- Extract db connection uri to a secret file `env.yaml`, then import in `users.yaml` as `configMapKeyRef`
+- Go to kubernetes folder, run `kubectl apply -f env.yaml -f auth.yaml -f users.yaml`, this will also create EC2 LoadBalancer
 - Run `kubectl get service` to get the services list, copy the **EXTERNAL-IP** of LoadBalancer, this is the URL to send HTTP requests.
 - In Postman, send a POST request `{ "email":"test@test.com", "password": "testers" }` to the URL `...ap-southeast-2.elb.amazonaws.com/signup`, response should be "User created.", and in MongoDB a new user `test@test.com` should be created as well.
 
@@ -68,4 +69,10 @@
 - Click *Next* go to **Network access**, then remove the default security groups and add the newly added `eks-efs` for both zones, click *Next* then click *Create*
 - This EFS can now be used as a volume, copy the File system ID `fs-4ae75172`
 
-
+## Add persistent volume
+- Go to `users.yaml`, add PersistentVolume `efs-pv`, PersistentVolumeClaim `efs-pvc` and StorageClass `efs-sc`
+- Update user-actions.js and user-routes.js to save `users-log.txt` file, rebuild image and push to docker hub
+- Run `kubectl delete deployment users-deployment`, then run `kubectl apply -f users.yaml` to redeploy
+- Send GET request to ``...ap-southeast-2.elb.amazonaws.com/logs`, it shoud return a list of logs, that means the logs file `users-log.txt` is saved on **EFS** successfully
+- To test persistent volume can survive pod shutdown, update users.yaml `replicas: 0`, run `kubectl apply -f users.yaml` to stop all pods
+- Update users.yaml `replicas: 2`, run `kubectl apply -f users.yaml` to launch 2 new pods, get logs request should still work
