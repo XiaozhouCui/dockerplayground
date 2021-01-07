@@ -22,6 +22,11 @@
 - On Network page, under **VPC** select newly created `eksVpc`, under **Cluster endpoint access**, choose `Public and private`, click *Next*
 - On Logging page, no need to add anything, click *Next*, then click *Create*
 
-## Talk to EKS from local machine
-- Goto file *user/.kube/config*, make a copy *config.minikube*
-- 
+## Talk to EKS from local machine using AWS CLI
+- Goto file *user/.kube/config*, make a backup copy *config.minikube* and delete the *config* file
+- Download and install AWS CLI on local machine
+- Goto AWS consoles, click **My Account** then select **My Security Credentials**
+- Under **Access Keys**, click **Create New Access Key** button and download **rootkey.csv** file
+- In CMD, enter `aws configure`, then enter the credentials from CSV file, and `ap-southeast-2` as region
+- Once logged in, enter command `aws eks --region ap-southeast-2 update-kubeconfig --name kub-dep-demo`, this will create the file *user/.kube/config* to connect to EKS
+- Now running `kubectl get pod` will connect to the EKS on the cloud, minikube can be deleted `minikube delete`
