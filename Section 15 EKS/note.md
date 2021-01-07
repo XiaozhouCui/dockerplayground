@@ -47,4 +47,11 @@
 - In **Compute and Scaling** page, under **Instance types** select at least `t3.small` or bigger
 - Under **Node Group scaling configuration**, select `2` nodes, **Nodes** are physical machines, click *Next*
 - In **Networking** page, disable **Allow remote access to nodes** (disable SSH) then click *Next* then *Create*
-- This will start 2 EC2 instances and add them to this k8s cluster, no Load Balancer added in EC2
+- This will start 2 EC2 instances and add them to this k8s cluster, no Load Balancer for now
+- Run `kubectl get node` can see the created nodes on EKS cloud
+
+## Apply yaml files on EKS
+- Make sure image path in yaml files are updated, and images are pushed to docker hub
+- Go to kubernetes folder, run `kubectl apply -f auth.yaml -f users.yaml`, this will also create EC2 LoadBalancer
+- Run `kubectl get service` to get the services list, copy the **EXTERNAL-IP** of LoadBalancer, this is the URL to send HTTP requests.
+- In Postman, send a POST request `{ "email":"test@test.com", "password": "testers" }` to the URL `...ap-southeast-2.elb.amazonaws.com/signup`, response should be "User created.", and in MongoDB a new user `test@test.com` should be created as well.
