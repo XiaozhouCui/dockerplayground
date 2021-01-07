@@ -55,3 +55,17 @@
 - Go to kubernetes folder, run `kubectl apply -f auth.yaml -f users.yaml`, this will also create EC2 LoadBalancer
 - Run `kubectl get service` to get the services list, copy the **EXTERNAL-IP** of LoadBalancer, this is the URL to send HTTP requests.
 - In Postman, send a POST request `{ "email":"test@test.com", "password": "testers" }` to the URL `...ap-southeast-2.elb.amazonaws.com/signup`, response should be "User created.", and in MongoDB a new user `test@test.com` should be created as well.
+
+## Deploy the Amazon EFS CSI Driver to Amazon EKS cluster
+- Install the CSI driver on EKS, run the command shown below
+- `kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.0"`
+- Now the EFS is supported as a volume type
+- Go to VPC on AWS, go to **VPCs -> eksVpc**, copy the IP address of **IPv4 CIDR** `192.168.0.0/16`
+- Go to EC2 on AWS, click *Security Groups* on the side bar, click *Create security group*
+- Name the security group `eks-efs`, enter `Security group for EFS` as **Description**, under **VPC** select `eksVpc`, under **Inbound rules** click *Add rule*, the select `NFS`, paste IPv4 CIDR `192.168.0.0/16` as `Custom` **Source**, then click *Create*
+- Go to EFS on AWS, click *Create file system*
+- In popup modal, name the EFS `eks-efs`, select `eksVpc`, click *Customize*
+- Click *Next* go to **Network access**, then remove the default security groups and add the newly added `eks-efs` for both zones, click *Next* then click *Create*
+- This EFS can now be used as a volume, copy the File system ID `fs-4ae75172`
+
+
