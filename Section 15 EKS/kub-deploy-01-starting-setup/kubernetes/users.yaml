@@ -30,6 +30,6 @@ spec:
           image: academind/kub-dep-users:latest
           env:
             - name: MONGODB_CONNECTION_URI
-              value: 'mongodb+srv://maximilian:wk4nFupsbntPbB3l@cluster0.ntrwp.mongodb.net/users?retryWrites=true&w=majority'
+              value: 'mongodb+srv://crmuser:1234@cluster0.x58f7.mongodb.net/users-eks?retryWrites=true&w=majority'
             - name: AUTH_API_ADDRESSS
-              value: 'auth-service.default:3000'
+              value: 'auth-service.default:3000' # auto generated domain name
