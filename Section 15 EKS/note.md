@@ -21,3 +21,7 @@
 - Select latest k8s version (`1.18`), under **Cluster Service Role** select `eksClusterRole`, click *Next*
 - On Network page, under **VPC** select newly created `eksVpc`, under **Cluster endpoint access**, choose `Public and private`, click *Next*
 - On Logging page, no need to add anything, click *Next*, then click *Create*
+
+## Talk to EKS from local machine
+- Goto file *user/.kube/config*, make a copy *config.minikube*
+- 
