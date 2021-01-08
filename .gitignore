@@ -1,5 +1,4 @@
 node_modules
-*.pdf
 *.pem
 *.ppk
 *.env
