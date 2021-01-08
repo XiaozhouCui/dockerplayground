@@ -78,3 +78,9 @@
 - Update users.yaml `replicas: 2`, run `kubectl apply -f users.yaml` to launch 2 new pods, get logs request should still work
 
 # Add tasks-api
+- Go to tasks-api/ folder, buid image and pupsh to `xiaozhoucui/kub-dep-tasks`
+- Go to kubernetes/ folder , create `tasks.yaml` file with deployment and service (LoadBalancer)
+- Run `kubectl apply -f tasks.yaml`
+- Since the codes in auth-api and users-api are updated, go to these folders, rebuild image and push to docker hub
+- Go to kubernetes folder, delete deployments by name `kubectl delete deployment users-deployment` and `kubectl delete deployment auth-deployment`
+- Re-apply the yaml files `kubectl apply -f users.yaml -f auth.yaml`
