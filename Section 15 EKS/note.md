@@ -73,6 +73,8 @@
 - Go to `users.yaml`, add PersistentVolume `efs-pv`, PersistentVolumeClaim `efs-pvc` and StorageClass `efs-sc`
 - Update user-actions.js and user-routes.js to save `users-log.txt` file, rebuild image and push to docker hub
 - Run `kubectl delete deployment users-deployment`, then run `kubectl apply -f users.yaml` to redeploy
-- Send GET request to ``...ap-southeast-2.elb.amazonaws.com/logs`, it shoud return a list of logs, that means the logs file `users-log.txt` is saved on **EFS** successfully
+- Send GET request to `...ap-southeast-2.elb.amazonaws.com/logs`, it shoud return a list of logs, that means the logs file `users-log.txt` is saved on **EFS** successfully
 - To test persistent volume can survive pod shutdown, update users.yaml `replicas: 0`, run `kubectl apply -f users.yaml` to stop all pods
 - Update users.yaml `replicas: 2`, run `kubectl apply -f users.yaml` to launch 2 new pods, get logs request should still work
+
+# Add tasks-api
