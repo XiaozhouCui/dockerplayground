@@ -84,3 +84,5 @@
 - Since the codes in auth-api and users-api are updated, go to these folders, rebuild image and push to docker hub
 - Go to kubernetes folder, delete deployments by name `kubectl delete deployment users-deployment` and `kubectl delete deployment auth-deployment`
 - Re-apply the yaml files `kubectl apply -f users.yaml -f auth.yaml`
+- Now the task API should be ready on a new URL, check both URL by running `kubectl get service`
+- User can use the user's URL to sign up and login, and use the tasks URL to perform CRUD operations

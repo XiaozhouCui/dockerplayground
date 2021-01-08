@@ -67,7 +67,7 @@ spec:
                 configMapKeyRef:
                   name: db-uri-env
                   key: uri
-            - name: AUTH_API_ADDRESSS
+            - name: AUTH_API_ADDRESS
               value: "auth-service.default:3000" # auto generated domain name
           volumeMounts: # at last, connect efs-sc, efs-pv and efs-pvc to container
             - name: efs-vol
